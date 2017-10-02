@@ -1,0 +1,28 @@
+﻿<Window x:Class="Conway.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Conway"
+        mc:Ignorable="d"
+        Title="MainWindow" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        
+        <Grid x:Name="PlaygroundGrid" >
+
+        </Grid>
+        <UniformGrid Rows="1"  Grid.Row="1">
+            <Button Content="Update" Click="Update"/>
+            <Button Content="Clear" Click="Clear"/>
+            <Button Content="Random" Click="Random"/>
+            <Button Content="Start" Click="Start"/>
+            <Button Content="Stop" Click="Stop"/>
+            <Slider/>
+        </UniformGrid>
+    </Grid>
+
+</Window>
