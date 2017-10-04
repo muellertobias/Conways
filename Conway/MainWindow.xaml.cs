@@ -1,4 +1,6 @@
 ﻿using Conway.Models;
+using Conway.ViewModels;
+using Conway.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,102 +26,76 @@ namespace Conway
     {
         private Playground playground;
         DispatcherTimer timer;
-        int sizeX;
-        int sizeY;
-        int interval; 
+        public int SizeX { get; set; }
+        public int SizeY { get; set; }
+
+        public List<CellViewModel> _viewModels = new List<CellViewModel>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            sizeX = 90;
-            sizeY = 90;
+            SizeX = 100;
+            SizeY = 100;
 
-            playground = new Playground(sizeX, sizeY);
-            definePlaygroundGrid();
+            playground = new Playground(SizeX, SizeY);
+            DefinePlaygroundGrid();
 
             timer = new DispatcherTimer();
             timer.Tick += (s, x) => Update(s, new RoutedEventArgs());
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
         }
 
-        private void definePlaygroundGrid()
+        private void DefinePlaygroundGrid()
         {
-            for (int i = 0; i < sizeX; i++)
+            for (int i = 0; i < SizeX; i++)
             {
-                var column = new ColumnDefinition();
-                column.Width = new GridLength(10, GridUnitType.Pixel);
+                var column = new ColumnDefinition()
+                {
+                    Width = new GridLength(7, GridUnitType.Pixel)
+                };
                 PlaygroundGrid.ColumnDefinitions.Add(column);
 
             }
 
-            for (int j = 0; j < sizeY; j++)
+            for (int j = 0; j < SizeY; j++)
             {
-                var row = new RowDefinition();
-                row.Height = new GridLength(10, GridUnitType.Pixel);
+                var row = new RowDefinition()
+                {
+                    Height = new GridLength(7, GridUnitType.Pixel)
+                };
                 PlaygroundGrid.RowDefinitions.Add(row);
             }
 
             foreach (Cell c in playground.Cells)
-            {
-                Rectangle rectangle = new Rectangle();
-                Grid.SetColumn(rectangle, c.PosX);
-                Grid.SetRow(rectangle, c.PosY);
+            {                
+                var vm = new CellViewModel(c);
+                CellView view = new CellView()
+                {
+                    DataContext = vm
+                };
+                _viewModels.Add(vm);
 
-                //button.Click += (s, e) =>
-                //{
-                //    c.Toogle();
-                //    Button sender = s as Button;
-                //    if (c.Alive)
-                //    {
-                //        sender.Background = Brushes.Green;
-                //    }
-                //    else
-                //    {
-                //        sender.Background = Brushes.LightGray;
-                //    }
-                //};
-
-                rectangle.Fill = Brushes.LightGray;
-
-                PlaygroundGrid.Children.Add(rectangle);
+                Grid.SetColumn(view, c.PosX);
+                Grid.SetRow(view, c.PosY);
+                PlaygroundGrid.Children.Add(view);
             }
         }
 
         private void Update(object sender, RoutedEventArgs e)
         {
             playground.Update();
-            UpdatePlaygroundGrid();
-        }
-
-        private void UpdatePlaygroundGrid()
-        {
-            foreach (Cell c in playground.Cells)
-            {
-                int index = sizeX * c.PosY + c.PosX;
-                var rectangle = PlaygroundGrid.Children[index] as Rectangle;
-                if (c.IsCurrentlyAlive)
-                {
-                    rectangle.Fill = Brushes.Green;
-                }
-                else
-                {
-                    rectangle.Fill = Brushes.LightGray;
-                }
-            }
         }
 
         private void Clear(object sender, RoutedEventArgs e)
         {
             playground.Clear();
-            UpdatePlaygroundGrid();
             timer.Stop();
         }
 
         private void Random(object sender, RoutedEventArgs e)
         {
             playground.Randomize();
-            UpdatePlaygroundGrid();
         }
 
         private void Start(object sender, RoutedEventArgs e)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Conway.Models
 {
+    // TODO Playground baut lediglich die Zellen auf
     public class Playground
     {
         public List<Cell> Cells { get; private set; }

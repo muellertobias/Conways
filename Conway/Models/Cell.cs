@@ -8,7 +8,7 @@ namespace Conway.Models
 {
     using Alive = Boolean;
 
-    public class Cell
+    public class Cell : INotifyStateChanged
     {
         public int PosX { get; set; }
         public int PosY { get; set; }
@@ -16,6 +16,8 @@ namespace Conway.Models
         public Alive IsNextGenerationAlive { get; set; }
 
         private List<Cell> neighbors;
+
+        public event StateChangedEventHandler StateChanged;
 
         public Cell(int posX, int posY) 
         {
@@ -64,18 +66,31 @@ namespace Conway.Models
 
         public void Evolve()
         {
-            IsCurrentlyAlive = IsNextGenerationAlive;
+            if (IsNextGenerationAlive != IsCurrentlyAlive)
+            {
+                IsCurrentlyAlive = IsNextGenerationAlive;
+                OnStateChanged();
+            }
         }
 
         public void Toogle()
         {
             IsCurrentlyAlive = !IsCurrentlyAlive;
+            OnStateChanged();
         }
 
         public void Reset()
         {
             IsCurrentlyAlive = false;
             IsNextGenerationAlive = false;
+            OnStateChanged();
+        }
+
+        public void OnStateChanged()
+        {
+            var handler = StateChanged;
+            if (handler != null)
+                StateChanged(this, new StateChangedEventArgs());
         }
 
         public override bool Equals(object obj)
