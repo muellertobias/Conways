@@ -94,6 +94,7 @@ namespace Conway.Models
             {
                 cell.IsCurrentlyAlive = rand.Next(0, 10) < 5 ? false : true;
             }
+            Update();
         }
 
         public string Save()

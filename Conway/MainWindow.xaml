@@ -12,7 +12,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         
-        <Grid x:Name="PlaygroundGrid" >
+        <Grid x:Name="PlaygroundGrid" MouseDown="PlaygroundGrid_MouseDown" MouseMove="PlaygroundGrid_MouseMove" MouseEnter="PlaygroundGrid_MouseEnter" MouseLeave="PlaygroundGrid_MouseLeave">
 
         </Grid>
         <UniformGrid Rows="1"  Grid.Row="1">
@@ -21,7 +21,9 @@
             <Button Content="Random" Click="Random"/>
             <Button Content="Start" Click="Start"/>
             <Button Content="Stop" Click="Stop"/>
-            <Slider/>
+            <ToggleButton>
+                
+            </ToggleButton>
         </UniformGrid>
     </Grid>
 

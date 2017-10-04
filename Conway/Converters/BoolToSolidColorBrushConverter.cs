@@ -15,7 +15,7 @@ namespace Conway.Converters
         {
             if (bool.TryParse(value.ToString(), out bool b))
             {
-                if (b) return Brushes.LightGreen;
+                if (b) return Brushes.Green;
                 else return Brushes.LightGray;
             }
             else

@@ -10,14 +10,27 @@ namespace Conway.Models
 
     public class Cell : INotifyStateChanged
     {
+        public event StateChangedEventHandler StateChanged;
+
         public int PosX { get; set; }
         public int PosY { get; set; }
-        public Alive IsCurrentlyAlive { get; set; }
-        public Alive IsNextGenerationAlive { get; set; }
 
-        private List<Cell> neighbors;
+        public Alive IsCurrentlyAlive
+        {
+            get { return _isCurrentlyAlive; }
+            set
+            {
+                if (_isCurrentlyAlive != value)
+                {
+                    _isCurrentlyAlive = value;
+                    OnStateChanged();
+                }
+            }
+        }
 
-        public event StateChangedEventHandler StateChanged;
+        private Alive _isNextGenerationAlive;
+        private Alive _isCurrentlyAlive;
+        private List<Cell> _neighbors;
 
         public Cell(int posX, int posY) 
         {
@@ -28,8 +41,8 @@ namespace Conway.Models
 
         public void SetNeighbors(List<Cell> neighbors)
         {
-            this.neighbors = neighbors;
-            this.neighbors.Remove(this);
+            _neighbors = neighbors;
+            _neighbors.Remove(this);
         }
 
         private void Update(List<Cell> neighbors)
@@ -44,7 +57,7 @@ namespace Conway.Models
                 }
             }
 
-            IsNextGenerationAlive = ApplyRule(nlifes);
+            _isNextGenerationAlive = ApplyRule(nlifes);
         }
 
         public Alive ApplyRule(int nlifes)
@@ -61,29 +74,26 @@ namespace Conway.Models
 
         public void Update()
         {
-            Update(neighbors);
+            Update(_neighbors);
         }
 
         public void Evolve()
         {
-            if (IsNextGenerationAlive != IsCurrentlyAlive)
+            if (_isNextGenerationAlive != IsCurrentlyAlive)
             {
-                IsCurrentlyAlive = IsNextGenerationAlive;
-                OnStateChanged();
+                IsCurrentlyAlive = _isNextGenerationAlive;
             }
         }
 
         public void Toogle()
         {
             IsCurrentlyAlive = !IsCurrentlyAlive;
-            OnStateChanged();
         }
 
         public void Reset()
         {
             IsCurrentlyAlive = false;
-            IsNextGenerationAlive = false;
-            OnStateChanged();
+            _isNextGenerationAlive = false;
         }
 
         public void OnStateChanged()
@@ -99,7 +109,6 @@ namespace Conway.Models
                 return false;
 
             var o = obj as Cell;
-
             return PosX == o.PosX && PosY == o.PosY;
         }
 

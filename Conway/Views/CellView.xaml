@@ -12,5 +12,5 @@
     <UserControl.Resources>
         <converters:BoolToSolidColorBrushConverter x:Key="boolToColor"/>
     </UserControl.Resources>
-    <Rectangle Fill="{Binding IsAlive, Converter={StaticResource boolToColor}}"/>
+    <Border Background="{Binding IsAlive, Converter={StaticResource boolToColor}}"/>
 </UserControl>

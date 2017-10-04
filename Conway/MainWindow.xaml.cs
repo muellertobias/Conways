@@ -28,6 +28,8 @@ namespace Conway
         DispatcherTimer timer;
         public int SizeX { get; set; }
         public int SizeY { get; set; }
+        public double CellSize { get; set; } 
+
 
         public List<CellViewModel> _viewModels = new List<CellViewModel>();
 
@@ -35,8 +37,9 @@ namespace Conway
         {
             InitializeComponent();
 
-            SizeX = 100;
-            SizeY = 100;
+            SizeX = 50;
+            SizeY = 50;
+            CellSize = 10d;
 
             playground = new Playground(SizeX, SizeY);
             DefinePlaygroundGrid();
@@ -52,7 +55,7 @@ namespace Conway
             {
                 var column = new ColumnDefinition()
                 {
-                    Width = new GridLength(7, GridUnitType.Pixel)
+                    Width = new GridLength(CellSize, GridUnitType.Pixel)
                 };
                 PlaygroundGrid.ColumnDefinitions.Add(column);
 
@@ -62,7 +65,7 @@ namespace Conway
             {
                 var row = new RowDefinition()
                 {
-                    Height = new GridLength(7, GridUnitType.Pixel)
+                    Height = new GridLength(CellSize, GridUnitType.Pixel)
                 };
                 PlaygroundGrid.RowDefinitions.Add(row);
             }
@@ -108,6 +111,60 @@ namespace Conway
         {
             timer.Stop();
             //string test = playground.Save();
+        }
+
+        Point currentPoint = new Point();
+        private void PlaygroundGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                currentPoint = e.GetPosition(sender as IInputElement);
+                var startCell = playground.Cells.Find(c => Match(c, currentPoint, CellSize));
+                if (startCell != null)
+                    startCell.IsCurrentlyAlive = true;
+            }
+        }
+
+        private bool Match(Cell cell, Point point, double cellSize)
+        {
+            return (Math.Abs(cell.PosX * CellSize - point.X) <= cellSize / 2d)
+                && (Math.Abs(cell.PosY * CellSize - point.Y) <= cellSize / 2d);
+        }
+
+        private void PlaygroundGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                var startCell = playground.Cells.Find(c => Match(c, currentPoint, CellSize));
+                Point newPosition = e.GetPosition(sender as IInputElement);
+                var endCell = playground.Cells.Find(c => Match(c, newPosition, CellSize));
+
+                if (startCell != null)
+                    startCell.IsCurrentlyAlive = true;
+
+                if (endCell != null)
+                    endCell.IsCurrentlyAlive = true;
+
+                currentPoint = newPosition;
+            }
+
+        }
+
+        private List<Cell> GetCellsBetweenPoints(Point start, Point end)
+        {
+            List<Cell> selectedCells = new List<Cell>();
+
+            return selectedCells;
+        }
+
+        private void PlaygroundGrid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cursor = Cursors.Cross;
+        }
+
+        private void PlaygroundGrid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cursor = Cursors.Arrow;
         }
     }
 }
