@@ -78,7 +78,7 @@ namespace Conway.ViewModels
             this.playground = playground;
             CellSize = cellSize;
 
-            timer = new DispatcherTimer();
+            timer = new DispatcherTimer(DispatcherPriority.Send);
             timer.Tick += (s, x) => UpdateCommand.Execute(null);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
 
