@@ -11,8 +11,8 @@ namespace Conway.Models
     public class Playground
     {
         public List<Cell> Cells { get; private set; }
-        private int SizeX;
-        private int SizeY;
+        public int SizeX { get; set; }
+        public int SizeY { get; set; }
 
         public Playground(int sizeX, int sizeY)
         {

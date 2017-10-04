@@ -24,60 +24,58 @@ namespace Conway
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Playground playground;
-        DispatcherTimer timer;
-        public int SizeX { get; set; }
-        public int SizeY { get; set; }
-        public double CellSize { get; set; } 
-
-
-        public List<CellViewModel> _viewModels = new List<CellViewModel>();
+        private MainViewModel _viewModel;
+        private Point currentPoint;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            SizeX = 50;
-            SizeY = 50;
-            CellSize = 10d;
-
-            playground = new Playground(SizeX, SizeY);
-            DefinePlaygroundGrid();
-
-            timer = new DispatcherTimer();
-            timer.Tick += (s, x) => Update(s, new RoutedEventArgs());
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
         }
 
-        private void DefinePlaygroundGrid()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < SizeX; i++)
+            currentPoint = new Point();
+            int SizeX = 50;
+            int SizeY = 50;
+            double cellSize = 10d;
+
+            Playground playground = new Playground(SizeX, SizeY);
+
+            _viewModel = new MainViewModel(playground, cellSize);
+            _viewModel.PlaygroundChanged += DefinePlaygroundGrid;
+
+            DefinePlaygroundGrid(playground, _viewModel.CellSize);
+            DataContext = _viewModel;
+        }
+
+        private void DefinePlaygroundGrid(Playground playground, double cellSize)
+        {
+            PlaygroundGrid.Children.Clear();
+
+            for (int i = 0; i < playground.SizeX; i++)
             {
                 var column = new ColumnDefinition()
                 {
-                    Width = new GridLength(CellSize, GridUnitType.Pixel)
+                    Width = new GridLength(cellSize, GridUnitType.Pixel)
                 };
                 PlaygroundGrid.ColumnDefinitions.Add(column);
-
             }
 
-            for (int j = 0; j < SizeY; j++)
+            for (int j = 0; j < playground.SizeY; j++)
             {
                 var row = new RowDefinition()
                 {
-                    Height = new GridLength(CellSize, GridUnitType.Pixel)
+                    Height = new GridLength(cellSize, GridUnitType.Pixel)
                 };
                 PlaygroundGrid.RowDefinitions.Add(row);
             }
 
             foreach (Cell c in playground.Cells)
             {                
-                var vm = new CellViewModel(c);
                 CellView view = new CellView()
                 {
-                    DataContext = vm
+                    DataContext = new CellViewModel(c)
                 };
-                _viewModels.Add(vm);
 
                 Grid.SetColumn(view, c.PosX);
                 Grid.SetRow(view, c.PosY);
@@ -85,59 +83,24 @@ namespace Conway
             }
         }
 
-        private void Update(object sender, RoutedEventArgs e)
-        {
-            playground.Update();
-        }
-
-        private void Clear(object sender, RoutedEventArgs e)
-        {
-            playground.Clear();
-            timer.Stop();
-        }
-
-        private void Random(object sender, RoutedEventArgs e)
-        {
-            playground.Randomize();
-        }
-
-        private void Start(object sender, RoutedEventArgs e)
-        {
-            if (!timer.IsEnabled)
-                timer.Start();
-        }
-
-        private void Stop(object sender, RoutedEventArgs e)
-        {
-            timer.Stop();
-            //string test = playground.Save();
-        }
-
-        Point currentPoint = new Point();
         private void PlaygroundGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
             {
                 currentPoint = e.GetPosition(sender as IInputElement);
-                var startCell = playground.Cells.Find(c => Match(c, currentPoint, CellSize));
+                var startCell = _viewModel.GetCell(currentPoint);
                 if (startCell != null)
                     startCell.IsCurrentlyAlive = true;
             }
-        }
-
-        private bool Match(Cell cell, Point point, double cellSize)
-        {
-            return (Math.Abs(cell.PosX * CellSize - point.X) <= cellSize / 2d)
-                && (Math.Abs(cell.PosY * CellSize - point.Y) <= cellSize / 2d);
         }
 
         private void PlaygroundGrid_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var startCell = playground.Cells.Find(c => Match(c, currentPoint, CellSize));
+                var startCell = _viewModel.GetCell(currentPoint);
                 Point newPosition = e.GetPosition(sender as IInputElement);
-                var endCell = playground.Cells.Find(c => Match(c, newPosition, CellSize));
+                var endCell = _viewModel.GetCell(newPosition);
 
                 if (startCell != null)
                     startCell.IsCurrentlyAlive = true;
@@ -147,14 +110,6 @@ namespace Conway
 
                 currentPoint = newPosition;
             }
-
-        }
-
-        private List<Cell> GetCellsBetweenPoints(Point start, Point end)
-        {
-            List<Cell> selectedCells = new List<Cell>();
-
-            return selectedCells;
         }
 
         private void PlaygroundGrid_MouseEnter(object sender, MouseEventArgs e)

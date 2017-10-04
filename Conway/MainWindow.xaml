@@ -3,28 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Conway.ViewModels"
         xmlns:local="clr-namespace:Conway"
         mc:Ignorable="d"
-        Title="MainWindow" SizeToContent="WidthAndHeight">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
-        
-        <Grid x:Name="PlaygroundGrid" MouseDown="PlaygroundGrid_MouseDown" MouseMove="PlaygroundGrid_MouseMove" MouseEnter="PlaygroundGrid_MouseEnter" MouseLeave="PlaygroundGrid_MouseLeave">
+        Title="MainWindow" SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+        Loaded="Window_Loaded">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Datei">
+                <MenuItem Header="Neu" Command="{Binding NewCommand}"/>
+                <MenuItem Header="Öffnen ..."/>
+                <MenuItem Header="Speichern"/>
+                <MenuItem Header="Speichern unter ..."/>
+                <Separator/>
+                <MenuItem Header="Beenden"/>
+            </MenuItem>
+        </Menu>
 
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="PlaygroundGrid" MouseDown="PlaygroundGrid_MouseDown" MouseMove="PlaygroundGrid_MouseMove" MouseEnter="PlaygroundGrid_MouseEnter" MouseLeave="PlaygroundGrid_MouseLeave">
+
+            </Grid>
+            <UniformGrid Rows="1"  Grid.Row="1">
+                <Button Content="Update" Command="{Binding UpdateCommand}"/>
+                <Button Content="Clear" Command="{Binding ClearCommand}"/>
+                <Button Content="Random" Command="{Binding RandomCommand}"/>
+                <Button Content="Start" Command="{Binding StartCommand}"/>
+                <Button Content="Stop" Command="{Binding StopCommand}"/>
+                <ToggleButton>
+
+                </ToggleButton>
+            </UniformGrid>
         </Grid>
-        <UniformGrid Rows="1"  Grid.Row="1">
-            <Button Content="Update" Click="Update"/>
-            <Button Content="Clear" Click="Clear"/>
-            <Button Content="Random" Click="Random"/>
-            <Button Content="Start" Click="Start"/>
-            <Button Content="Stop" Click="Stop"/>
-            <ToggleButton>
-                
-            </ToggleButton>
-        </UniformGrid>
-    </Grid>
-
+    </DockPanel>
 </Window>

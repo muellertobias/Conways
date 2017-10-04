@@ -57,7 +57,9 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToSolidColorBrushConverter.cs" />
     <Compile Include="Models\INotifyStateChanged.cs" />
+    <Compile Include="Utilities\Command.cs" />
     <Compile Include="ViewModels\CellViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\CellView.xaml.cs">
       <DependentUpon>CellView.xaml</DependentUpon>
     </Compile>
