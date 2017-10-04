@@ -62,25 +62,27 @@ namespace Conway
 
             foreach (Cell c in playground.Cells)
             {
-                Button button = new Button();
-                Grid.SetColumn(button, c.PosX);
-                Grid.SetRow(button, c.PosY);
+                Rectangle rectangle = new Rectangle();
+                Grid.SetColumn(rectangle, c.PosX);
+                Grid.SetRow(rectangle, c.PosY);
 
-                button.Click += (s, e) =>
-                {
-                    c.Toogle();
-                    Button sender = s as Button;
-                    if (c.Alive)
-                    {
-                        sender.Background = Brushes.Green;
-                    }
-                    else
-                    {
-                        sender.Background = Brushes.LightGray;
-                    }
-                };
+                //button.Click += (s, e) =>
+                //{
+                //    c.Toogle();
+                //    Button sender = s as Button;
+                //    if (c.Alive)
+                //    {
+                //        sender.Background = Brushes.Green;
+                //    }
+                //    else
+                //    {
+                //        sender.Background = Brushes.LightGray;
+                //    }
+                //};
 
-                PlaygroundGrid.Children.Add(button);
+                rectangle.Fill = Brushes.LightGray;
+
+                PlaygroundGrid.Children.Add(rectangle);
             }
         }
 
@@ -95,14 +97,14 @@ namespace Conway
             foreach (Cell c in playground.Cells)
             {
                 int index = sizeX * c.PosY + c.PosX;
-                var button = PlaygroundGrid.Children[index] as Button;
-                if (c.Alive)
+                var rectangle = PlaygroundGrid.Children[index] as Rectangle;
+                if (c.IsCurrentlyAlive)
                 {
-                    button.Background = Brushes.Green;
+                    rectangle.Fill = Brushes.Green;
                 }
                 else
                 {
-                    button.Background = Brushes.LightGray;
+                    rectangle.Fill = Brushes.LightGray;
                 }
             }
         }

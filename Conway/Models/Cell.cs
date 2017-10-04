@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Conway.Models
 {
+    using Alive = Boolean;
+
     public class Cell
     {
         public int PosX { get; set; }
         public int PosY { get; set; }
-        public bool Alive { get; set; }
-        public bool AliveNextGeneration { get; set; }
+        public Alive IsCurrentlyAlive { get; set; }
+        public Alive IsNextGenerationAlive { get; set; }
 
         private List<Cell> neighbors;
 
@@ -25,27 +27,33 @@ namespace Conway.Models
         public void SetNeighbors(List<Cell> neighbors)
         {
             this.neighbors = neighbors;
+            this.neighbors.Remove(this);
         }
 
         private void Update(List<Cell> neighbors)
         {
-            int count = 0;
+            int nlifes = 0;
+
             foreach (var cell in neighbors)
             {
-                if (!cell.Equals(this))
+                if (cell.IsCurrentlyAlive)
                 {
-                    if (cell.Alive)
-                        count++;
+                    nlifes++;
                 }
             }
 
-            if (Alive)
+            IsNextGenerationAlive = ApplyRule(nlifes);
+        }
+
+        public Alive ApplyRule(int nlifes)
+        {
+            if (IsCurrentlyAlive)
             {
-                AliveNextGeneration = (count >= 2 && count <= 3) ? true : false;
+                return (nlifes >= 2 && nlifes <= 3) ? true : false;
             }
             else
             {
-                AliveNextGeneration = count == 3 ? true : false;
+                return nlifes == 3 ? true : false;
             }
         }
 
@@ -54,20 +62,20 @@ namespace Conway.Models
             Update(neighbors);
         }
 
-        public void NextGeneration()
+        public void Evolve()
         {
-            Alive = AliveNextGeneration;
+            IsCurrentlyAlive = IsNextGenerationAlive;
         }
 
-        internal void Toogle()
+        public void Toogle()
         {
-            Alive = !Alive;
+            IsCurrentlyAlive = !IsCurrentlyAlive;
         }
 
-        internal void Reset()
+        public void Reset()
         {
-            Alive = false;
-            AliveNextGeneration = false;
+            IsCurrentlyAlive = false;
+            IsNextGenerationAlive = false;
         }
 
         public override bool Equals(object obj)
@@ -77,7 +85,7 @@ namespace Conway.Models
 
             var o = obj as Cell;
 
-            return this.PosX == o.PosX && this.PosY == o.PosY;
+            return PosX == o.PosX && PosY == o.PosY;
         }
 
         public override int GetHashCode()

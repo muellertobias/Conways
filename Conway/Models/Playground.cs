@@ -19,12 +19,14 @@ namespace Conway.Models
             SizeY = sizeY;
 
             Cells = new List<Cell>(sizeX * sizeY);
+
             for (int i = 0; i < sizeX * sizeY; i++)
             {
                 int posX = i % sizeX;
                 int posY = (i - posX) / sizeX; 
                 Cells.Add(new Cell(posX, posY));
             }
+
             SetupNeighborhood();
         }
 
@@ -63,7 +65,7 @@ namespace Conway.Models
             }
         }
 
-        internal void Update()
+        public void Update()
         {
             foreach (var cell in Cells)
             {
@@ -72,7 +74,7 @@ namespace Conway.Models
 
             foreach (var cell in Cells)
             {
-                cell.NextGeneration();
+                cell.Evolve();
             }
         }
 
@@ -84,12 +86,12 @@ namespace Conway.Models
             }
         }
 
-        internal void Randomize()
+        public void Randomize()
         {
             Random rand = new Random();
             foreach (var cell in Cells)
             {
-                cell.Alive = rand.Next(0, 10) < 5 ? false : true;
+                cell.IsCurrentlyAlive = rand.Next(0, 10) < 5 ? false : true;
             }
         }
 
@@ -105,7 +107,7 @@ namespace Conway.Models
             {
                 for (int x = 0; x < SizeX; x++)
                 {
-                    output += Cells[x + SizeX * y].Alive ? "1" : "0";
+                    output += Cells[x + SizeX * y].IsCurrentlyAlive ? "1" : "0";
                 }
                 output += "\n";
             }
