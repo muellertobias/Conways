@@ -19,7 +19,7 @@
                 <Separator/>
                 <MenuItem Header="Löschen" Command="{Binding ClearCommand}"/>
                 <Separator/>
-                <MenuItem Header="Beenden" />
+                <MenuItem Header="Beenden" Command="{Binding CloseCommand}" />
             </MenuItem>
             <MenuItem Header="Zellen">
                 <MenuItem Header="Zufallserzeugte Spielfläche" Command="{Binding RandomCommand}"/>
@@ -36,6 +36,21 @@
 
             </Grid>
             <UniformGrid Rows="1"  Grid.Row="1">
+                <ToggleButton IsThreeState="True" IsChecked="{Binding Applicator}">
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="Draw"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="Eraser"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="{x:Null}">
+                                    <Setter Property="Content" Value=""/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
                 <Button Content="Update" Command="{Binding UpdateCommand}"/>
                 <Button Content="Start" Command="{Binding StartCommand}"/>
                 <Button Content="Stop" Command="{Binding StopCommand}"/>

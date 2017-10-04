@@ -22,6 +22,8 @@ namespace Conway.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public bool? Applicator { get; set; }
+
         public double CellSize { get; set; }
 
         private int _generation;
@@ -65,6 +67,7 @@ namespace Conway.ViewModels
         public ICommand SaveCommand { get; private set; }
         public ICommand SaveAsCommand { get; private set; }
         public ICommand OpenCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
 
         private Playground playground;
         private DispatcherTimer timer;
@@ -90,6 +93,8 @@ namespace Conway.ViewModels
             OpenCommand = new Command(o => Open());
             SaveCommand = new Command(o => Save());
             SaveAsCommand = new Command(o => SaveAs());
+
+            CloseCommand = new Command(o => System.Windows.Application.Current.Shutdown());
 
             SoftwareName = string.Format("Conway's Game of Life: Neu {0}x{1}", playground.SizeX, playground.SizeY);
         }

@@ -87,36 +87,53 @@ namespace Conway
 
         private void PlaygroundGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+            if (e.ButtonState == MouseButtonState.Pressed && _viewModel.Applicator != null)
             {
                 currentPoint = e.GetPosition(sender as IInputElement);
                 var startCell = _viewModel.GetCell(currentPoint);
                 if (startCell != null)
-                    startCell.IsCurrentlyAlive = true;
+                    startCell.IsCurrentlyAlive = _viewModel.Applicator.Value;
             }
         }
 
         private void PlaygroundGrid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed && _viewModel.Applicator.HasValue)
             {
                 var startCell = _viewModel.GetCell(currentPoint);
                 Point newPosition = e.GetPosition(sender as IInputElement);
                 var endCell = _viewModel.GetCell(newPosition);
 
                 if (startCell != null)
-                    startCell.IsCurrentlyAlive = true;
+                    startCell.IsCurrentlyAlive = _viewModel.Applicator.Value;
 
                 if (endCell != null)
-                    endCell.IsCurrentlyAlive = true;
+                    endCell.IsCurrentlyAlive = _viewModel.Applicator.Value;
 
                 currentPoint = newPosition;
             }
+            Cursor = GetCursor();
         }
 
         private void PlaygroundGrid_MouseEnter(object sender, MouseEventArgs e)
         {
-            Cursor = Cursors.Cross;
+            Cursor = GetCursor();
+        }
+
+        private Cursor GetCursor()
+        {
+            if (_viewModel.Applicator == null)
+            {
+                return Cursors.Arrow;
+            }
+            else if (_viewModel.Applicator.Value)
+            {
+                return Cursors.Cross;
+            }
+            else
+            {
+                return Cursors.Hand;
+            }
         }
 
         private void PlaygroundGrid_MouseLeave(object sender, MouseEventArgs e)
