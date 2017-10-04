@@ -99,22 +99,26 @@ namespace Conway.Models
 
         public string Save()
         {
-            // TODO Compression
+            string output = string.Format("{0}\n{1}\n", SizeX, SizeY);
 
-            string output = string.Empty;
+            bool currentState = Cells.First().IsCurrentlyAlive;
+            int counter = 0;
 
-            output += string.Format("{0}\n{1}\n", SizeX, SizeY);
-
-            for (int y = 0; y < SizeY; y++)
+            for (int i = 0; i < Cells.Count; ++i)
             {
-                for (int x = 0; x < SizeX; x++)
+                if (currentState != Cells[i].IsCurrentlyAlive)
                 {
-                    output += Cells[x + SizeX * y].IsCurrentlyAlive ? "1" : "0";
+                    output += string.Format("{0} {1}\n", counter, currentState);
+                    counter = 1;
+                    currentState = Cells[i].IsCurrentlyAlive;
                 }
-                output += "\n";
+                else
+                {
+                    counter++;
+                }
             }
-
-            Console.WriteLine(output);
+            output += string.Format("{0} {1}\n", counter, currentState);
+            //Console.WriteLine(output);
             return output;
         }
 
@@ -129,11 +133,26 @@ namespace Conway.Models
 
             Cells.Clear();
             Cells = new List<Cell>(SizeX * SizeY);
-            for (int i = 0; i < SizeX * SizeY; i++)
+
+            int currentIndex = 0;
+            for (int i = 2; i < lines.Length; i++)
             {
-                int posX = i % SizeX;
-                int posY = (i - posX) / SizeX;
-                Cells.Add(new Cell(posX, posY));
+                string[] content = lines[i].Split(' ');
+                if (content.Length == 2)
+                {
+                    int n = int.Parse(content.First());
+                    bool state = bool.Parse(content.Last());
+
+                    while (n > 0)
+                    {
+                        int posX = currentIndex % SizeX;
+                        int posY = (currentIndex - posX) / SizeX;
+                        Cells.Add(new Cell(posX, posY) { IsCurrentlyAlive = state });
+
+                        currentIndex++;
+                        n--;
+                    }
+                }
             }
             SetupNeighborhood();
         }

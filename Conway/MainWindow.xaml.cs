@@ -51,6 +51,8 @@ namespace Conway
         private void DefinePlaygroundGrid(Playground playground, double cellSize)
         {
             PlaygroundGrid.Children.Clear();
+            PlaygroundGrid.ColumnDefinitions.Clear();
+            PlaygroundGrid.RowDefinitions.Clear();
 
             for (int i = 0; i < playground.SizeX; i++)
             {

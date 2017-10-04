@@ -6,18 +6,23 @@
         xmlns:viewModels="clr-namespace:Conway.ViewModels"
         xmlns:local="clr-namespace:Conway"
         mc:Ignorable="d"
-        Title="MainWindow" SizeToContent="WidthAndHeight"
+        SizeToContent="WidthAndHeight"
         d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Title="{Binding SoftwareName}">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Datei">
                 <MenuItem Header="Neu" Command="{Binding NewCommand}"/>
-                <MenuItem Header="Öffnen ..."/>
-                <MenuItem Header="Speichern"/>
-                <MenuItem Header="Speichern unter ..."/>
+                <MenuItem Header="Öffnen ..." Command="{Binding OpenCommand}"/>
+                <MenuItem Header="Speichern" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="Speichern unter ..." Command="{Binding SaveAsCommand}"/>
                 <Separator/>
-                <MenuItem Header="Beenden"/>
+                <MenuItem Header="Löschen" Command="{Binding ClearCommand}"/>
+                <Separator/>
+                <MenuItem Header="Beenden" />
+            </MenuItem>
+            <MenuItem Header="Zellen">
+                <MenuItem Header="Zufallserzeugte Spielfläche" Command="{Binding RandomCommand}"/>
             </MenuItem>
         </Menu>
 
@@ -32,13 +37,16 @@
             </Grid>
             <UniformGrid Rows="1"  Grid.Row="1">
                 <Button Content="Update" Command="{Binding UpdateCommand}"/>
-                <Button Content="Clear" Command="{Binding ClearCommand}"/>
-                <Button Content="Random" Command="{Binding RandomCommand}"/>
                 <Button Content="Start" Command="{Binding StartCommand}"/>
                 <Button Content="Stop" Command="{Binding StopCommand}"/>
-                <ToggleButton>
-
-                </ToggleButton>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Generation:"/>
+                    <Label Content="{Binding Generation}" Grid.Column="1"/>
+                </Grid>
             </UniformGrid>
         </Grid>
     </DockPanel>
