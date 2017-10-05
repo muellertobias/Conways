@@ -59,6 +59,9 @@
     <Compile Include="Converters\BoolToSolidColorBrushConverter.cs" />
     <Compile Include="Models\INotifyStateChanged.cs" />
     <Compile Include="Utilities\Command.cs" />
+    <Compile Include="Utilities\NewPlaygroundDialog.xaml.cs">
+      <DependentUpon>NewPlaygroundDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CellViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\CellView.xaml.cs">
@@ -76,6 +79,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Utilities\NewPlaygroundDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

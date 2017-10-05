@@ -1,4 +1,5 @@
 ﻿using Conway.Models;
+using Conway.Utilities;
 using Conway.ViewModels;
 using Conway.Views;
 using System;
@@ -35,12 +36,21 @@ namespace Conway
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             currentPoint = new Point();
+
+            // Default Werte
             int SizeX = 50;
             int SizeY = 50;
             double cellSize = 10d;
 
-            Playground playground = new Playground(SizeX, SizeY);
+            NewPlaygroundDialog dialog = new NewPlaygroundDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                SizeX = dialog.SizeX;
+                SizeY = dialog.SizeY;
+                cellSize = dialog.CellSize;
+            }
 
+            Playground playground = new Playground(SizeX, SizeY);
             _viewModel = new MainViewModel(playground, cellSize);
             _viewModel.PlaygroundChanged += DefinePlaygroundGrid;
 

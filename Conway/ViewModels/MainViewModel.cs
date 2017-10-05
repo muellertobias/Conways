@@ -183,9 +183,18 @@ namespace Conway.ViewModels
             StopCommand.Execute(null);
             ClearCommand.Execute(null);
 
-            // TEST
-            playground = new Playground(10, 10);
-            PlaygroundChanged?.Invoke(playground, CellSize);
+            NewPlaygroundDialog dialog = new NewPlaygroundDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                int SizeX = dialog.SizeX;
+                int SizeY = dialog.SizeY;
+                CellSize = dialog.CellSize;
+
+                playground = new Playground(SizeX, SizeY);
+                PlaygroundChanged?.Invoke(playground, CellSize);
+
+                SoftwareName = string.Format("Conway's Game of Life: Neu {0}x{1}", playground.SizeX, playground.SizeY, filename);
+            }
         }
 
         private bool IsCellInRange(Cell cell, Point point, double cellSize)

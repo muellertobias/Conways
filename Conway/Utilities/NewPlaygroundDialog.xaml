@@ -1,0 +1,36 @@
+﻿<Window x:Class="Conway.Utilities.NewPlaygroundDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Conway.Utilities"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="Window_ContentRendered"
+        mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="NoResize"
+        Title="Neuer Spielfläche" SizeToContent="Height" Width="200">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Breite:" Grid.Row="0" Grid.Column="0"/>
+        <TextBox Name="txtWidth" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center"/>
+
+        <Label Content="Höhe:" Grid.Row="1" Grid.Column="0"/>
+        <TextBox Name="txtHeight" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center"/>
+
+        <Label Content="Zellgröße:" Grid.Row="2" Grid.Column="0"/>
+        <TextBox Name="txtCellSize" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center"/>
+
+        <Button Content="_Ok" Click="Ok_Click" IsDefault="True" Grid.Row="3" Grid.Column="0"/>
+        <Button Content="_Abbruch" IsCancel="True" Grid.Row="3" Grid.Column="2"/>
+    </Grid>
+</Window>

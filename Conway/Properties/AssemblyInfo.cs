@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Conway")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Frauenhofer Geselschaft")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Conway")]
-[assembly: AssemblyCopyright("Copyright © Frauenhofer Geselschaft 2017")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
